@@ -1,114 +1,76 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gráfico de KPIs de Gestión de Riesgos</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-    .container { max-width: 800px; margin: auto; }
-    canvas { max-width: 100%; height: 600px !important; }
+    .container { max-width: 800px; margin: auto; display: flex; flex-wrap: wrap; gap: 20px; }
+    .chart-container { flex: 1; min-width: 400px; }
+    canvas { max-width: 100%; height: 500px !important; }
+    .form-container { flex: 0 0 250px; min-width: 200px; }
     .form-group { margin: 10px 0; }
-    label { display: inline-block; width: 250px; }
-    input { width: 100px; padding: 5px; }
-    button { padding: 10px 20px; background-color: #36A2EB; color: white; border: none; cursor: pointer; }
+    label { display: block; font-size: 12px; margin-bottom: 5px; }
+    input { width: 100%; padding: 5px; font-size: 12px; }
+    button { width: 100%; padding: 10px; background-color: #36A2EB; color: white; border: none; cursor: pointer; margin-top: 10px; }
     button:hover { background-color: #1e87d0; }
+    h3 { font-size: 14px; margin-bottom: 10px; color: #333; }
   </style>
 </head>
 <body>
-    <table>
-<tr><td><div class="container">
-    <canvas id="kpiChart"></canvas>
-  </div>
-  </td></tr>
-  <tr><td>
   <div class="container">
+    <div class="chart-container">
+      <canvas id="kpiChart"></canvas>
+    </div>
+    <div class="form-container">
       <h3>Modificar Datos</h3>
-    <form id="kpiForm">
-      <div class="form-group">
-        <label>Riesgos con mitigación (%):</label>
-        <input type="number" id="kpi1" min="0" max="100" value="85">
-      </div>
-      <div class="form-group">
-        <label>Tiempo mitigación crítica (%):</label>
-        <input type="number" id="kpi2" min="0" max="100" value="70">
-      </div>
-      <div class="form-group">
-        <label>Cumplimiento políticas (%):</label>
-        <input type="number" id="kpi3" min="0" max="100" value="90">
-      </div>
-      <div class="form-group">
-        <label>Activos clasificados (%):</label>
-        <input type="number" id="kpi4" min="0" max="100" value="95">
-      </div>
-      <div class="form-group">
-        <label>Incidentes por período (%):</label>
-        <input type="number" id="kpi5" min="0" max="100" value="20">
-      </div>
-      <div class="form-group">
-        <label>Costo por incidente (%):</label>
-        <input type="number" id="kpi6" min="0" max="100" value="65">
-      </div>
-      <div class="form-group">
-        <label>Empleados capacitados (%):</label>
-        <input type="number" id="kpi7" min="0" max="100" value="80">
-      </div>
-      <div class="form-group">
-        <label>Detección proactiva (%):</label>
-        <input type="number" id="kpi8" min="0" max="100" value="75">
-      </div>
-      <div class="form-group">
-        <label>Cumplimiento normativo (%):</label>
-        <input type="number" id="kpi9" min="0" max="100" value="88">
-      </div>
-      <div class="form-group">
-        <label>Madurez gestión riesgos (%):</label>
-        <input type="number" id="kpi10" min="0" max="100" value="82">
-      </div>
-      <button type="submit">Actualizar Gráfico</button>
-    </form>
+      <form id="kpiForm">
+        <div class="form-group">
+          <label>Riesgos con mitigación (%):</label>
+          <input type="number" id="kpi1" min="0" max="100" value="85">
+        </div>
+        <div class="form-group">
+          <label>Tiempo mitigación crítica (%):</label>
+          <input type="number" id="kpi2" min="0" max="100" value="70">
+        </div>
+        <div class="form-group">
+          <label>Cumplimiento políticas (%):</label>
+          <input type="number" id="kpi3" min="0" max="100" value="90">
+        </div>
+        <div class="form-group">
+          <label>Activos clasificados (%):</label>
+          <input type="number" id="kpi4" min="0" max="100" value="95">
+        </div>
+        <div class="form-group">
+          <label>Incidentes por período (%):</label>
+          <input type="number" id="kpi5" min="0" max="100" value="20">
+        </div>
+        <div class="form-group">
+          <label>Costo por incidente (%):</label>
+          <input type="number" id="kpi6" min="0" max="100" value="65">
+        </div>
+        <div class="form-group">
+          <label>Empleados capacitados (%):</label>
+          <input type="number" id="kpi7" min="0" max="100" value="80">
+        </div>
+        <div class="form-group">
+          <label>Detección proactiva (%):</label>
+          <input type="number" id="kpi8" min="0" max="100" value="75">
+        </div>
+        <div class="form-group">
+          <label>Cumplimiento normativo (%):</label>
+          <input type="number" id="kpi9" min="0" max="100" value="88">
+        </div>
+        <div class="form-group">
+          <label>Madurez gestión riesgos (%):</label>
+          <input type="number" id="kpi10" min="0" max="100" value="82">
+        </div>
+        <button type="submit">Actualizar Gráfico</button>
+      </form>
+    </div>
   </div>
-  </td></tr>
-    </table>
   <script>
     const kpiDescriptions = {
       'Riesgos con mitigación': 'Refleja la capacidad de la organización para abordar proactivamente los riesgos, asegurando que las amenazas no queden sin respuesta.',
@@ -180,6 +142,21 @@
             ticks: { beginAtZero: true, max: 100, stepSize: 20 }
           }
         },
+        plugins: {
+          legend: { position: 'top', labels: { color: '#333' } },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: function(context) {
+                const index = context.dataIndex;
+                const label = internalLabels[index] || '';
+                const value = context.raw || 0;
+                const description = kpiDescriptions[label] || 'No hay descripción disponible.';
+                return `${label}: ${value}% \n\nImportancia: ${description}`;
+              }
+            }
+          }
+        }
       }
     });
 
