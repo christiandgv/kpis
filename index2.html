@@ -55,9 +55,12 @@
   </style>
 </head>
 <body>
-  <div class="container">
+    <table>
+<tr><td><div class="container">
     <canvas id="kpiChart"></canvas>
   </div>
+  </td></tr>
+  <tr><td>
   <div class="container">
       <h3>Modificar Datos</h3>
     <form id="kpiForm">
@@ -104,6 +107,8 @@
       <button type="submit">Actualizar Gráfico</button>
     </form>
   </div>
+  </td></tr>
+    </table>
   <script>
     const kpiDescriptions = {
       'Riesgos con mitigación': 'Refleja la capacidad de la organización para abordar proactivamente los riesgos, asegurando que las amenazas no queden sin respuesta.',
