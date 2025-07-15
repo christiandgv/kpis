@@ -173,27 +173,6 @@
             ticks: { beginAtZero: true, max: 100, stepSize: 20 }
           }
         },
-        plugins: {
-          legend: { position: 'top', labels: { color: '#333' } },
-          title: {
-            display: true,
-            text: 'Desempeño de KPIs de Gestión de Riesgos de Seguridad',
-            color: '#333',
-            font: { size: 16 }
-          },
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: function(context) {
-                const index = context.dataIndex;
-                const label = internalLabels[index] || '';
-                const value = context.raw || 0;
-                const description = kpiDescriptions[label] || 'No hay descripción disponible.';
-                return `${label}: ${value}% \n\nImportancia: ${description}`;
-              }
-            }
-          }
-        }
       }
     });
 
