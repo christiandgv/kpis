@@ -57,7 +57,52 @@
 <body>
   <div class="container">
     <canvas id="kpiChart"></canvas>
-  
+  </div>
+  <div class="container">
+      <h3>Modificar Datos</h3>
+    <form id="kpiForm">
+      <div class="form-group">
+        <label>Riesgos con mitigación (%):</label>
+        <input type="number" id="kpi1" min="0" max="100" value="85">
+      </div>
+      <div class="form-group">
+        <label>Tiempo mitigación crítica (%):</label>
+        <input type="number" id="kpi2" min="0" max="100" value="70">
+      </div>
+      <div class="form-group">
+        <label>Cumplimiento políticas (%):</label>
+        <input type="number" id="kpi3" min="0" max="100" value="90">
+      </div>
+      <div class="form-group">
+        <label>Activos clasificados (%):</label>
+        <input type="number" id="kpi4" min="0" max="100" value="95">
+      </div>
+      <div class="form-group">
+        <label>Incidentes por período (%):</label>
+        <input type="number" id="kpi5" min="0" max="100" value="20">
+      </div>
+      <div class="form-group">
+        <label>Costo por incidente (%):</label>
+        <input type="number" id="kpi6" min="0" max="100" value="65">
+      </div>
+      <div class="form-group">
+        <label>Empleados capacitados (%):</label>
+        <input type="number" id="kpi7" min="0" max="100" value="80">
+      </div>
+      <div class="form-group">
+        <label>Detección proactiva (%):</label>
+        <input type="number" id="kpi8" min="0" max="100" value="75">
+      </div>
+      <div class="form-group">
+        <label>Cumplimiento normativo (%):</label>
+        <input type="number" id="kpi9" min="0" max="100" value="88">
+      </div>
+      <div class="form-group">
+        <label>Madurez gestión riesgos (%):</label>
+        <input type="number" id="kpi10" min="0" max="100" value="82">
+      </div>
+      <button type="submit">Actualizar Gráfico</button>
+    </form>
   </div>
   <script>
     const kpiDescriptions = {
