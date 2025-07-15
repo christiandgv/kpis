@@ -236,16 +236,16 @@
     document.getElementById('kpiForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const newData = [
-        Number(document.getElementById('kpi1').value),
-        Number(document.getElementById('kpi2').value),
-        Number(document.getElementById('kpi3').value),
-        Number(document.getElementById('kpi4').value),
-        Number(document.getElementById('kpi5').value),
-        Number(document.getElementById('kpi6').value),
-        Number(document.getElementById('kpi7').value),
-        Number(document.getElementById('kpi8').value),
-        Number(document.getElementById('kpi9').value),
-        Number(document.getElementById('kpi10').value)
+        Math.min(Math.max(Number(document.getElementById('kpi1').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi2').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi3').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi4').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi5').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi6').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi7').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi8').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi9').value) || 0, 0), 100),
+        Math.min(Math.max(Number(document.getElementById('kpi10').value) || 0, 0), 100)
       ];
       kpiChart.data.datasets[0].data = newData;
       kpiChart.update();
